@@ -1,5 +1,1 @@
-angular.module('learningAngular', [])
-.controller('practiceCtrl', function($scope){
-  $scope.name = 'Josephine';
-
-})  
+angular.module('starterApp', []);

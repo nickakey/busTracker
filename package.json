@@ -5,8 +5,7 @@
   "author": "Nick Akey",
   "license": "UNLICENSED",
   "private": true,
-  "scripts": {
-  },
+  "scripts": {},
   "dependencies": {
     "bootstrap": "^4.0.0-alpha.2",
     "angular": "^1.6"
