@@ -2,7 +2,7 @@ angular.module('starterApp')
 
 .controller('starterAppController', function($scope){
   $scope.message = 'Not clicked'
-  $scope.onClick = function($scope){
+  $scope.update = function(){
     $scope.message = 'Clicked';
   }
 })
