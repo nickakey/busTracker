@@ -1,7 +1,10 @@
 angular.module('starterApp')
 
 .controller('starterAppController', function($scope){
-  $scope.message = 'I am a message!!'
+  $scope.message = 'Not clicked'
+  $scope.onClick = function($scope){
+    $scope.message = 'Clicked';
+  }
 })
 
 .component('app', {
