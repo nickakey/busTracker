@@ -1,6 +1,6 @@
 angular.module('app')
 .service('geoService', function($http){
-  this.parseJSON = function (cb) {
+  this.getJSON = function () {
     return $http.get("src/data/geo.json");
   }
 })
