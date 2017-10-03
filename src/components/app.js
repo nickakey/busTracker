@@ -1,4 +1,4 @@
-angular.module('starterApp')
+angular.module('app')
 
 .controller('starterAppController', function($scope){
   $scope.message = 'Not clicked'
