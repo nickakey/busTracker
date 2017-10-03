@@ -4,12 +4,12 @@ BusTracker
  
 Usage
 ---
-Start the server with this command:
+Start the dev with this command:
  
 ```
 npm run start
 ```
-Then open up localhost:8000
+Then open up localhost:8080
  
 
  

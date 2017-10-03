@@ -1,10 +1,10 @@
 {
   "name": "BusTracker",
   "version": "1.0.0",
-  "description": "Track the real-time locations of buses in SF",
+  "description": "Track the real time positions of buses in San Francisco",
   "author": "Nick Akey",
   "license": "UNLICENSED",
-  "private": false,
+  "private": true,
   "scripts": {
     "start": "live-server"
   },
