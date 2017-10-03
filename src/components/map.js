@@ -1,8 +1,9 @@
 angular.module('app')
 .controller('mapController', function($scope, geoJSON){
-  console.log(geoJSON.parseJSON())
-
-
+  geoJSON.parseJSON()
+  .then((geoJSON)=>{
+    $scope.geoJSON = geoJSON;
+  })
 })
 
 .directive('map', function(){
