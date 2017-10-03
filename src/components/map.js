@@ -9,6 +9,9 @@ angular.module('app')
 
 .directive('map', ()=>{
   return {
+    link: function(scope, element){
+      console.log(arguments)
+    },
     templateUrl: 'src/templates/map.html' 
   }
 })
