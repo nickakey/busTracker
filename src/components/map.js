@@ -7,7 +7,8 @@ angular.module('app')
   }
 })
 
-.component('map', {
-  controller: 'mapController',
-  templateUrl: 'src/templates/map.html' 
+.directive('map', ()=>{
+  return {
+    templateUrl: 'src/templates/map.html' 
+  }
 })
