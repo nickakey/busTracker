@@ -1,10 +1,10 @@
 {
-  "name": "AngularStarterRepo",
+  "name": "BusTracker",
   "version": "1.0.0",
-  "description": "Angular Starter Repo",
+  "description": "Track the real-time locations of buses in SF",
   "author": "Nick Akey",
   "license": "UNLICENSED",
-  "private": true,
+  "private": false,
   "scripts": {
     "start": "python -m SimpleHTTPServer"
   },
