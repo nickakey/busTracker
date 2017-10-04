@@ -3,7 +3,7 @@ angular.module('app')
 .directive('map', function(geoService, busLocationService, busService){
   return {
 
-    cityProjection: d3.geo.mercator().center([-122.4194, 37.7749]).scale(350000).translate([window.innerWidth / 2, window.innerHeight / 2]),
+    cityProjection: d3.geo.mercator().center([-122.4194, 37.7749]).scale(500000).translate([window.innerWidth / 2, window.innerHeight / 2]),
     buses: null,
 
     link: function($scope, templateDOM){
@@ -73,6 +73,7 @@ angular.module('app')
 
       for(let i = 0; i < this.buses.length; i++){
         this.buses[i].coords[0] = this.buses[i].coords[0] + this.buses[i].longitudeChangePerFrame;
+        this.buses[i].coords[1] = this.buses[i].coords[1] + this.buses[i].latitudeChangePerFrame;
         canvasContext.beginPath()
         path(circle.origin(this.buses[i].coords).angle(0.0003)())
         canvasContext.fillStyle = '#3388a7'
