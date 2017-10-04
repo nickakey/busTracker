@@ -3,6 +3,8 @@ angular.module('app')
 .directive('map', function(geoService, busLocationService, busFormattingService){
   return {
 
+    cityProjection: d3.geo.mercator().center([-122.4194, 37.7749]).scale(350000).translate([window.innerWidth / 2, window.innerHeight / 2]),
+
     link: function($scope, templateDOM){
       geoService.getJSON()
       .then((geoData)=>{
@@ -19,19 +21,10 @@ angular.module('app')
       var neighborhoodsJSON = geoData.data.neighborhoods;
       var steetsJSON = geoData.data.streets;
       var cityCoordinates = geoData.data.cityCoordinates;
-
-      var height = window.innerHeight;
-      var width = window.innerWidth;
-
-      var cityProjection = d3.geo.mercator()
-        .center(cityCoordinates)
-        .scale(300000)
-        .translate([width / 2, height / 2]);
       
       var path = d3.geo.path()
-        .projection(cityProjection)
+        .projection(this.cityProjection)
         .context(canvasContext);
-      canvasContext.beginPath();
 
       path(neighborhoodsJSON);
       canvasContext.fillStyle = '#abf2f1';
@@ -49,34 +42,20 @@ angular.module('app')
 
     drawBuses(templateDOM, busData){
       var buses = busFormattingService.format(busData.data.vehicle);
-
-
-
       var canvasContext = templateDOM[0].children[1].getContext('2d');
-      canvasContext.clearRect(0, 0, 1000, 650)
-
-      var height = window.innerHeight;
-      var width = window.innerWidth;
-
-      var projection = d3.geo.mercator()
-        .center([-122.4194, 37.7749])
-        .scale(300000)
-        .translate([width / 2, height / 2])
 
       var path = d3.geo.path()
-        .projection(projection)
+        .projection(this.cityProjection)
         .context(canvasContext)
 
       var circle = d3.geo.circle()      
 
       for(let i = 0; i < buses.length; i++){
-        console.log(buses[i])
         canvasContext.beginPath()
         path(circle.origin(buses[i]).angle(0.0003)())
         canvasContext.fillStyle = '#3388a7'
         canvasContext.fill()
       }          
-
     },
 
     animateBuses(){
