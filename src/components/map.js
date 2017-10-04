@@ -1,19 +1,29 @@
 angular.module('app')
 
-.directive('map', function(geoService, busLocationService, busFormattingService){
+.directive('map', function(geoService, busLocationService, busService){
   return {
 
     cityProjection: d3.geo.mercator().center([-122.4194, 37.7749]).scale(350000).translate([window.innerWidth / 2, window.innerHeight / 2]),
+    buses: [],
 
     link: function($scope, templateDOM){
       geoService.getJSON()
       .then((geoData)=>{
-        this.drawMap(templateDOM, geoData);
+        return this.drawMap(templateDOM, geoData);
       })
-      busLocationService.getJSON()
-      .then((busData)=>{
-        this.drawBuses(templateDOM, busData);
+      .then(()=>{
+        this.drawBuses(templateDOM);
       })
+      // busLocationService.getJSON()
+      // .then((busData)=>{
+      //   this.drawBuses(templateDOM, busData);
+      // })
+    },
+
+    drawBuses(templateDOM){
+      this.calculateAnimations();
+      setInterval(()=>{this.calculateAnimations()}, 15000);
+      setInterval(()=>{this.renderBuses(templateDOM)}, 45)
     },
 
     drawMap(templateDOM, geoData){ 
@@ -37,9 +47,16 @@ angular.module('app')
       canvasContext.stroke();
     },
 
-    drawBuses(templateDOM, busData){
-      var buses = busFormattingService.format(busData.data.vehicle);
+    calculateAnimations(){
+      busLocationService.getJSON()
+      .then((busData)=>{
+        this.buses = busService.calculateAnimations(busData.data.vehicle);
+      })
+    },
+
+    renderBuses(templateDOM){
       var canvasContext = templateDOM[0].children[1].getContext('2d');
+      canvasContext.clearRect(0, 0, 900, 900);      
 
       var path = d3.geo.path()
         .projection(this.cityProjection)
@@ -47,16 +64,17 @@ angular.module('app')
 
       var circle = d3.geo.circle()      
 
-      for(let i = 0; i < buses.length; i++){
+      for(let i = 0; i < this.buses.length; i++){
+        this.buses[i].coords[0] += .00005;
         canvasContext.beginPath()
-        path(circle.origin(buses[i]).angle(0.0003)())
+        path(circle.origin(this.buses[i].coords).angle(0.0003)())
+
         canvasContext.fillStyle = '#3388a7'
         canvasContext.fill()
       }          
     },
 
     animateBuses(){
-      //set interval to draw Buses
     },
 
     templateUrl: 'src/templates/map.html',
