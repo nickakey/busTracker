@@ -25,7 +25,7 @@ angular.module('app')
       //this.renderBuses(templateDOM);
       //setInterval(()=>{this.calculateAnimations()}, 15000);
       setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 40)}, 2000)
-      setTimeout(()=>{clearInterval(myInterval)}, 3000)
+      //setTimeout(()=>{clearInterval(myInterval)}, 3000)
     },
 
     drawMap(templateDOM, geoData){ 
@@ -72,9 +72,7 @@ angular.module('app')
       var circle = d3.geo.circle()      
 
       for(let i = 0; i < this.buses.length; i++){
-        if(i === 1){console.log(this.buses[1])}
-        this.buses[i].coords[0] += this.buses[i].longitudeChangePerFrame;
-        this.buses[i].coords[1] += this.buses[i].latitudeChangePerFrame;
+        this.buses[i].coords[0] = this.buses[i].coords[0] + this.buses[i].longitudeChangePerFrame;
         canvasContext.beginPath()
         path(circle.origin(this.buses[i].coords).angle(0.0003)())
         canvasContext.fillStyle = '#3388a7'

@@ -28,7 +28,7 @@ angular.module('app')
     return _.map(newBuses, (bus)=>{
       console.log('map is being called!')
 
-      var destinationPoint = geolib.computeDestinationPoint({lat: bus.lat, lon: bus.lon}, 53, bus.heading);
+      var destinationPoint = geolib.computeDestinationPoint({lat: bus.lat, lon: bus.lon}, 300, bus.heading);
       destinationPoint.latitude = round('round', destinationPoint.latitude, 6);
       destinationPoint.longitude = round('round', destinationPoint.longitude, 6);      
 
