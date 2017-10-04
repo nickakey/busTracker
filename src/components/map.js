@@ -18,15 +18,12 @@ angular.module('app')
 
     drawMap(templateDOM, geoData){ 
       var canvasContext = templateDOM[0].children[0].getContext('2d');
-      var neighborhoodsJSON = geoData.data.neighborhoods;
-      var steetsJSON = geoData.data.streets;
-      var cityCoordinates = geoData.data.cityCoordinates;
       
       var path = d3.geo.path()
         .projection(this.cityProjection)
         .context(canvasContext);
 
-      path(neighborhoodsJSON);
+      path(geoData.data.neighborhoods);
       canvasContext.fillStyle = '#abf2f1';
       canvasContext.fill();
       canvasContext.lineWidth = '2';
@@ -34,7 +31,7 @@ angular.module('app')
       canvasContext.stroke();
       canvasContext.beginPath();
 
-      path(steetsJSON);
+      path(geoData.data.streets);
       canvasContext.lineWidth = '1.5';
       canvasContext.strokeStyle = 'rgba(0, 0, 0, 0.08)';
       canvasContext.stroke();
