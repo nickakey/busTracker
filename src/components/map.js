@@ -1,6 +1,6 @@
 angular.module('app')
 
-.directive('map', function(geoService){
+.directive('map', function(geoService, busLocationService, busFormattingService){
   return {
 
     link: function($scope, templateDOM){
@@ -8,7 +8,10 @@ angular.module('app')
       .then((geoData)=>{
         this.drawMap(templateDOM, geoData);
       })
-      this.drawBuses(templateDOM);
+      busLocationService.getJSON()
+      .then((busData)=>{
+        this.drawBuses(templateDOM, busData);
+      })
     },
 
     drawMap(templateDOM, geoData){ 
@@ -44,14 +47,14 @@ angular.module('app')
       canvasContext.stroke();
     },
 
-    drawBuses(templateDOM){
+    drawBuses(templateDOM, busData){
+      var buses = busFormattingService.format(busData.data.vehicle);
+
+
+
       var canvasContext = templateDOM[0].children[1].getContext('2d');
       canvasContext.clearRect(0, 0, 1000, 650)
 
-      const busesNow = [
-        [-122.42748, 37.7518699],
-        [-122.422852, 37.794834]
-      ]
       var height = window.innerHeight;
       var width = window.innerWidth;
 
@@ -60,23 +63,24 @@ angular.module('app')
         .scale(300000)
         .translate([width / 2, height / 2])
 
-      canvasContext.clearRect(0, 0, 900, 900);
-      //canvasContext.save();
-
       var path = d3.geo.path()
         .projection(projection)
         .context(canvasContext)
 
       var circle = d3.geo.circle()      
 
-      for(let i = 0; i < busesNow.length; i++){
-        console.log(busesNow[i])
+      for(let i = 0; i < buses.length; i++){
+        console.log(buses[i])
         canvasContext.beginPath()
-        path(circle.origin(busesNow[i]).angle(0.0060)())
+        path(circle.origin(buses[i]).angle(0.0003)())
         canvasContext.fillStyle = '#3388a7'
         canvasContext.fill()
       }          
 
+    },
+
+    animateBuses(){
+      //set interval to draw Buses
     },
 
     templateUrl: 'src/templates/map.html',

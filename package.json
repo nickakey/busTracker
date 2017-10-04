@@ -9,8 +9,9 @@
     "start": "live-server"
   },
   "dependencies": {
+    "angular": "^1.6",
     "bootstrap": "^4.0.0-alpha.2",
-    "angular": "^1.6"
+    "underscore": "^1.8.3"
   },
   "devDependencies": {
     "jquery": "^3.1.1",
