@@ -14,18 +14,13 @@ angular.module('app')
       .then(()=>{
         this.drawBuses(templateDOM);
       })
-      // busLocationService.getJSON()
-      // .then((busData)=>{
-      //   this.drawBuses(templateDOM, busData);
-      // })
     },
 
     drawBuses(templateDOM){
       this.calculateAnimations();
-      //this.renderBuses(templateDOM);
-      //setInterval(()=>{this.calculateAnimations()}, 15000);
-      setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 40)}, 2000)
-      //setTimeout(()=>{clearInterval(myInterval)}, 3000)
+      setInterval(()=>{this.calculateAnimations()}, 6000);
+      setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 20)}, 2000)
+      //setTimeout(()=>{clearInterval(myInterval)}, 10000)
     },
 
     drawMap(templateDOM, geoData){ 
@@ -61,7 +56,7 @@ angular.module('app')
     },
 
     renderBuses(templateDOM){
-      console.log('renderbuses is being called ')
+      console.log('render buses is being called ', this.buses)
       var canvasContext = templateDOM[0].children[1].getContext('2d');
       canvasContext.clearRect(0, 0, 900, 900);      
 
