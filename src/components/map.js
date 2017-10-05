@@ -21,7 +21,7 @@ angular.module('app')
 
     drawBuses(templateDOM){
       this.calculateAnimations();
-      setInterval(()=>{this.calculateAnimations()}, 7000);
+      setInterval(()=>{this.calculateAnimations()}, 15000);
       setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 20)}, 2000)
     },
 
@@ -55,7 +55,6 @@ angular.module('app')
         } else {
           busService.calculateActualAnimations.call(this, busData.data.vehicle, this.buses);
         }
-        console.log('this is the buses after ', this.buses)
       })
       .catch((err)=>{
         throw err;
