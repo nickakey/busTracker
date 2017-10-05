@@ -4,7 +4,7 @@ angular.module('app')
   return {
 
     cityProjection: d3.geo.mercator().center([-122.4194, 37.7749]).scale(500000).translate([window.innerWidth / 2, window.innerHeight / 2]),
-    buses: null,
+    buses: {},
 
     link: function($scope, templateDOM){
       geoService.getJSON()
@@ -18,7 +18,7 @@ angular.module('app')
 
     drawBuses(templateDOM){
       this.calculateAnimations();
-      setInterval(()=>{this.calculateAnimations()}, 6000);
+      //setInterval(()=>{this.calculateAnimations()}, 6000);
       setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 20)}, 2000)
       //setTimeout(()=>{clearInterval(myInterval)}, 10000)
     },
@@ -47,16 +47,16 @@ angular.module('app')
     calculateAnimations(){
       busLocationService.getJSON()
       .then((busData)=>{
-        if(!this.buses){
-          this.buses = busService.calculatePredictedAnimations(busData.data.vehicle);
+        console.log('this is the this in buslocation then ', this)
+        if(_.isEmpty(this.buses)){
+          busService.calculatePredictedAnimations.call(this, busData.data.vehicle);
         } else {
-          this.buses = busService.calculateActualAnimations(busData.data.vehicle, this.buses);
+          busService.calculateActualAnimations.call(this, busData.data.vehicle, this.buses);
         }
       })
     },
 
     renderBuses(templateDOM){
-      console.log('render buses is being called ', this.buses)
       var canvasContext = templateDOM[0].children[1].getContext('2d');
       canvasContext.clearRect(0, 0, 900, 900);      
 
@@ -66,11 +66,12 @@ angular.module('app')
 
       var circle = d3.geo.circle()      
 
-      for(let i = 0; i < this.buses.length; i++){
-        this.buses[i].coords[0] = this.buses[i].coords[0] + this.buses[i].longitudeChangePerFrame;
-        this.buses[i].coords[1] = this.buses[i].coords[1] + this.buses[i].latitudeChangePerFrame;
+      for(currentBus in this.buses){
+        var bus = this.buses[currentBus];
+        bus.coords[0] = bus.coords[0] + bus.longitudeChangePerFrame;
+        bus.coords[1] = bus.coords[1] + bus.latitudeChangePerFrame;
         canvasContext.beginPath()
-        path(circle.origin(this.buses[i].coords).angle(0.0003)())
+        path(circle.origin(bus.coords).angle(0.0003)())
         canvasContext.fillStyle = '#3388a7'
         canvasContext.fill()
       }          
