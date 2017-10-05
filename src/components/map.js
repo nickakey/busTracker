@@ -1,6 +1,6 @@
 angular.module('app')
 
-.directive('map', function(geoService, busLocationService, busService){
+.directive('map', function(geoService, busLocationService, busAnimationService){
   return {
 
     cityProjection: d3.geo.mercator().center([-122.4194, 37.7749]).scale(500000).translate([window.innerWidth / 2, window.innerHeight / 2]),
@@ -20,9 +20,11 @@ angular.module('app')
     },
 
     drawBuses(templateDOM){
-      this.calculateAnimations();
-      setInterval(()=>{console.log('this is the buses ', this.buses); this.calculateAnimations()}, 8000);
-      setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 20)}, 2000)
+      this.calculateAnimations()
+      .then(()=>{
+        setInterval(()=>{this.renderBuses(templateDOM)}, 20)
+        setInterval(()=>{this.calculateAnimations()}, 15000);
+      })
     },
 
     drawMap(templateDOM, geoData){ 
@@ -47,18 +49,14 @@ angular.module('app')
     },
 
     calculateAnimations(){
-      console.log('this is the bus before  ', this.buses)
-      busLocationService.getJSON()
-      .then((busData)=>{
-        busService.calculatePredictedAnimations.call(this, busData.data.vehicle);
-        // if(_.isEmpty(this.buses)){
-        //   busService.calculatePredictedAnimations.call(this, busData.data.vehicle);
-        // } else {
-        //   busService.calculateActualAnimations.call(this, busData.data.vehicle, this.buses);
-        // }
-      })
-      .catch((err)=>{
-        throw err;
+      return new Promise((resolve, reject) => {
+        busLocationService.getJSON()
+        .then((busData)=>{
+          busAnimationService.calculatePredictedAnimations.call(this, busData.data.vehicle, resolve);
+        })
+        .catch((err)=>{
+          throw err;
+        })
       })
     },
 
@@ -74,16 +72,13 @@ angular.module('app')
 
       for(currentBus in this.buses){
         var bus = this.buses[currentBus];
-        bus.coords[0] = bus.coords[0] + bus.longitudeChangePerFrame;
-        bus.coords[1] = bus.coords[1] + bus.latitudeChangePerFrame;
+        bus.lon = bus.lon + bus.longitudeChangePerFrame;
+        bus.lat = bus.lat + bus.latitudeChangePerFrame;
         canvasContext.beginPath()
-        path(circle.origin(bus.coords).angle(0.0003)())
+        path(circle.origin([bus.lon, bus.lat]).angle(0.0003)())
         canvasContext.fillStyle = '#3388a7'
         canvasContext.fill()
       }          
-    },
-
-    animateBuses(){
     },
 
     templateUrl: 'src/templates/map.html',
