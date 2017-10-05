@@ -7,24 +7,54 @@ angular.module('app')
     buses: {},
 
     link: function($scope, templateDOM){
-      geoService.getJSON()
-      .then((geoData)=>{
-        return this.drawMap(templateDOM, geoData);
-      })
+      this.loadingScreenOn();
+      this.init($scope, templateDOM)
       .then(()=>{
-        this.drawBuses(templateDOM);
+        this.loadingScreenOff();
       })
-      .catch((err)=>{
-        throw err;
+    },
+
+    loadingScreenOn: function(){
+      var body = document.getElementById('body');
+      var loadingScreen = document.createElement('div');      
+      loadingScreen.innerHTML = 'LOADING';
+      loadingScreen.setAttribute("style","width: 1000px; height: 650px; z-index: 5; position: absolute; left: 0px; top: 0px; background-color: white;")
+      loadingScreen.id = 'loading';
+      body.appendChild( loadingScreen )
+    },
+
+    loadingScreenOff: function(){
+      var loadingScreen = document.getElementById('loading');
+      loadingScreen.outerHTML = '';
+    },
+
+    init: function($scope, templateDOM){
+      return new Promise((resolve, reject)=>{
+        geoService.getJSON()
+        .then((geoData)=>{
+          return this.drawMap(templateDOM, geoData);
+        })
+        .then(()=>{
+          return this.drawBuses(templateDOM);
+        })
+        .then(()=>{
+          resolve();
+        })
+        .catch((err)=>{
+          throw err;
+        })
       })
     },
 
     drawBuses(templateDOM){
-      this.prepareAnimations()
-      .then(()=>{
-        setInterval(()=>{this.renderBuses(templateDOM)}, 115)
-        setInterval(()=>{this.prepareAnimations()}, 15000);
-      })
+      return new Promise((resolve, reject)=>{
+        this.prepareAnimations()
+        .then(()=>{
+          setInterval(()=>{this.renderBuses(templateDOM)}, 115)
+          setInterval(()=>{this.prepareAnimations()}, 15000);
+          resolve();
+        })
+      })      
     },
 
     drawMap(templateDOM, geoData){ 
