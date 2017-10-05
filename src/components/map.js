@@ -72,8 +72,8 @@ angular.module('app')
 
       for(currentBus in this.buses){
         var bus = this.buses[currentBus];
-        bus.lon = bus.lon + bus.longitudeChangePerFrame;
-        bus.lat = bus.lat + bus.latitudeChangePerFrame;
+        bus.lon += bus.longitudeChangePerFrame;
+        bus.lat += bus.latitudeChangePerFrame;
         canvasContext.beginPath()
         path(circle.origin([bus.lon, bus.lat]).angle(0.0003)())
         canvasContext.fillStyle = '#3388a7'
