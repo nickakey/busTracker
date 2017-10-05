@@ -21,7 +21,7 @@ angular.module('app')
 
     drawBuses(templateDOM){
       this.calculateAnimations();
-      setInterval(()=>{this.calculateAnimations()}, 15000);
+      setInterval(()=>{console.log('this is the buses ', this.buses); this.calculateAnimations()}, 8000);
       setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 20)}, 2000)
     },
 
@@ -50,11 +50,12 @@ angular.module('app')
       console.log('this is the bus before  ', this.buses)
       busLocationService.getJSON()
       .then((busData)=>{
-        if(_.isEmpty(this.buses)){
-          busService.calculatePredictedAnimations.call(this, busData.data.vehicle);
-        } else {
-          busService.calculateActualAnimations.call(this, busData.data.vehicle, this.buses);
-        }
+        busService.calculatePredictedAnimations.call(this, busData.data.vehicle);
+        // if(_.isEmpty(this.buses)){
+        //   busService.calculatePredictedAnimations.call(this, busData.data.vehicle);
+        // } else {
+        //   busService.calculateActualAnimations.call(this, busData.data.vehicle, this.buses);
+        // }
       })
       .catch((err)=>{
         throw err;
