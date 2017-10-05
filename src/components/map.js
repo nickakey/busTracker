@@ -8,7 +8,7 @@ angular.module('app')
 
     link: function($scope, templateDOM){
       this.loadingScreenOn();
-      this.init($scope, templateDOM)
+      this.initMap($scope, templateDOM)
       .then(()=>{
         this.loadingScreenOff();
       })
@@ -28,7 +28,7 @@ angular.module('app')
       loadingScreen.outerHTML = '';
     },
 
-    init: function($scope, templateDOM){
+    initMap: function($scope, templateDOM){
       return new Promise((resolve, reject)=>{
         geoService.getJSON()
         .then((geoData)=>{
@@ -50,9 +50,8 @@ angular.module('app')
       return new Promise((resolve, reject)=>{
         this.prepareAnimations()
         .then(()=>{
-          setInterval(()=>{this.renderBuses(templateDOM)}, 115)
+          setInterval(()=>{this.renderBuses(templateDOM, resolve)}, 115)
           setInterval(()=>{this.prepareAnimations()}, 15000);
-          resolve();
         })
       })      
     },
@@ -90,7 +89,7 @@ angular.module('app')
       })
     },
 
-    renderBuses(templateDOM){
+    renderBuses(templateDOM, resolve){
       var canvasContext = templateDOM[0].children[1].getContext('2d');
       canvasContext.clearRect(0, 0, 1000, 650);   
 
@@ -108,7 +107,8 @@ angular.module('app')
         path(circle.origin([bus.lon, bus.lat]).angle(0.00024)())
         canvasContext.fillStyle = '#3388a7'
         canvasContext.fill()
-      }          
+      } 
+      resolve();         
     },
 
     templateUrl: 'src/templates/map.html',
