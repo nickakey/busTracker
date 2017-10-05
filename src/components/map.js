@@ -20,10 +20,10 @@ angular.module('app')
     },
 
     drawBuses(templateDOM){
-      this.calculateAnimations()
+      this.prepareAnimations()
       .then(()=>{
         setInterval(()=>{this.renderBuses(templateDOM)}, 115)
-        setInterval(()=>{this.calculateAnimations()}, 15000);
+        setInterval(()=>{this.prepareAnimations()}, 15000);
       })
     },
 
@@ -48,11 +48,11 @@ angular.module('app')
       canvasContext.stroke();
     },
 
-    calculateAnimations(){
+    prepareAnimations(){
       return new Promise((resolve, reject) => {
         busLocationService.getJSON()
         .then((busData)=>{
-          busAnimationService.calculatePredictedAnimations.call(this, busData.data.vehicle, resolve);
+          busAnimationService.calculateAnimations.call(this, busData.data.vehicle, resolve);
         })
         .catch((err)=>{
           throw err;
