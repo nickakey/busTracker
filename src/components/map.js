@@ -14,13 +14,15 @@ angular.module('app')
       .then(()=>{
         this.drawBuses(templateDOM);
       })
+      .catch((err)=>{
+        throw err;
+      })
     },
 
     drawBuses(templateDOM){
       this.calculateAnimations();
-      setInterval(()=>{this.calculateAnimations()}, 15000);
+      setInterval(()=>{this.calculateAnimations()}, 7000);
       setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 20)}, 2000)
-      //setTimeout(()=>{clearInterval(myInterval)}, 10000)
     },
 
     drawMap(templateDOM, geoData){ 
@@ -45,20 +47,24 @@ angular.module('app')
     },
 
     calculateAnimations(){
+      console.log('this is the bus before  ', this.buses)
       busLocationService.getJSON()
       .then((busData)=>{
-        console.log('this is the this in buslocation then ', this)
         if(_.isEmpty(this.buses)){
           busService.calculatePredictedAnimations.call(this, busData.data.vehicle);
         } else {
           busService.calculateActualAnimations.call(this, busData.data.vehicle, this.buses);
         }
+        console.log('this is the buses after ', this.buses)
+      })
+      .catch((err)=>{
+        throw err;
       })
     },
 
     renderBuses(templateDOM){
       var canvasContext = templateDOM[0].children[1].getContext('2d');
-      canvasContext.clearRect(0, 0, 900, 900);      
+      canvasContext.clearRect(0, 0, 1000, 650);      
 
       var path = d3.geo.path()
         .projection(this.cityProjection)
