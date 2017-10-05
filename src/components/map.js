@@ -22,7 +22,7 @@ angular.module('app')
     drawBuses(templateDOM){
       this.calculateAnimations()
       .then(()=>{
-        setInterval(()=>{this.renderBuses(templateDOM)}, 20)
+        setInterval(()=>{this.renderBuses(templateDOM)}, 115)
         setInterval(()=>{this.calculateAnimations()}, 15000);
       })
     },
@@ -62,7 +62,7 @@ angular.module('app')
 
     renderBuses(templateDOM){
       var canvasContext = templateDOM[0].children[1].getContext('2d');
-      canvasContext.clearRect(0, 0, 1000, 650);      
+      canvasContext.clearRect(0, 0, 1000, 650);   
 
       var path = d3.geo.path()
         .projection(this.cityProjection)
@@ -75,7 +75,7 @@ angular.module('app')
         bus.lon += bus.longitudeChangePerFrame;
         bus.lat += bus.latitudeChangePerFrame;
         canvasContext.beginPath()
-        path(circle.origin([bus.lon, bus.lat]).angle(0.0003)())
+        path(circle.origin([bus.lon, bus.lat]).angle(0.00024)())
         canvasContext.fillStyle = '#3388a7'
         canvasContext.fill()
       }          
