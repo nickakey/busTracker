@@ -18,7 +18,7 @@ angular.module('app')
 
     drawBuses(templateDOM){
       this.calculateAnimations();
-      //setInterval(()=>{this.calculateAnimations()}, 6000);
+      setInterval(()=>{this.calculateAnimations()}, 15000);
       setTimeout(()=>{myInterval = setInterval(()=>{this.renderBuses(templateDOM)}, 20)}, 2000)
       //setTimeout(()=>{clearInterval(myInterval)}, 10000)
     },
